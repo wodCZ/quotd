@@ -17,10 +17,11 @@ curl https://api.quotd.io/quotes/1
 ```
 
 You may also access:
-  - all quotes (`/quotes`)
-  - a list of categories (`/categories`)
-  - a list of authors (`/authors`)
-  - all quotes from a specific author (`/authors/1`).
+
+- all quotes (`/quotes`)
+- a list of categories (`/categories`)
+- a list of authors (`/authors`)
+- all quotes from a specific author (`/authors/1`).
 
 Check out the [documentation](https://api.quotd.io/) for more information.
 
