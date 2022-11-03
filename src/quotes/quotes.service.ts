@@ -1,9 +1,36 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { CreateQuoteDto } from './dto/create-quote.dto';
+import { UpdateQuoteDto } from './dto/update-quote.dto';
 
 @Injectable()
 export class QuotesService {
   constructor(private prisma: PrismaService) {}
+
+  create(createQuoteDto: CreateQuoteDto) {
+    const {
+      text,
+      author: { name: author },
+      category: { name: category },
+    } = createQuoteDto;
+    return this.prisma.quote.create({
+      data: {
+        text,
+        author: {
+          connectOrCreate: {
+            where: { name: author },
+            create: { name: author },
+          },
+        },
+        category: {
+          connectOrCreate: {
+            where: { name: category },
+            create: { name: category },
+          },
+        },
+      },
+    });
+  }
 
   findAll() {
     return this.prisma.quote.findMany({
@@ -51,6 +78,38 @@ export class QuotesService {
           },
         },
       },
+    });
+  }
+
+  update(id: number, updateQuoteDto: UpdateQuoteDto) {
+    const {
+      text,
+      author: { name: author },
+      category: { name: category },
+    } = updateQuoteDto;
+    return this.prisma.quote.update({
+      where: { id },
+      data: {
+        text,
+        author: {
+          connectOrCreate: {
+            where: { name: author },
+            create: { name: author },
+          },
+        },
+        category: {
+          connectOrCreate: {
+            where: { name: category },
+            create: { name: category },
+          },
+        },
+      },
+    });
+  }
+
+  remove(id: number) {
+    return this.prisma.quote.delete({
+      where: { id },
     });
   }
 }
