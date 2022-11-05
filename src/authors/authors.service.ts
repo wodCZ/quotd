@@ -5,7 +5,7 @@ import { UpdateAuthorDto } from './dto/update-author.dto';
 
 @Injectable()
 export class AuthorsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   create(createAuthorDto: CreateAuthorDto) {
     const { name } = createAuthorDto;
