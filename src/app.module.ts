@@ -4,6 +4,7 @@ import { QuotesModule } from './quotes/quotes.module';
 import { AuthorsModule } from './authors/authors.module';
 import { CategoriesModule } from './categories/categories.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { PrismaModule } from './prisma/prisma.module';
     QuotesModule,
     AuthorsModule,
     CategoriesModule,
+    AuthModule,
     PrismaModule,
   ],
 })
