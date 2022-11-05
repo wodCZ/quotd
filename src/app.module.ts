@@ -5,6 +5,7 @@ import { AuthorsModule } from './authors/authors.module';
 import { CategoriesModule } from './categories/categories.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { AuthModule } from './auth/auth.module';
     AuthorsModule,
     CategoriesModule,
     AuthModule,
+    UsersModule,
     PrismaModule,
   ],
 })
