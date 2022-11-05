@@ -25,6 +25,7 @@ model Quote {
   category   Category @relation(fields: [categoryId], references: [id])
   categoryId Int
 
+  @@index([authorId, categoryId])
   @@map("quotes")
 }
 
