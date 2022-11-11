@@ -1,7 +1,47 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateQuoteDto } from './dto/create-quote.dto';
 import { UpdateQuoteDto } from './dto/update-quote.dto';
+
+const createQuoteWithAuthorAndCategory = (
+  text: string,
+  author: string,
+  category: string,
+) => {
+  return Prisma.validator<Prisma.QuoteCreateInput>()({
+    text,
+    author: {
+      connectOrCreate: {
+        where: { name: author },
+        create: { name: author },
+      },
+    },
+    category: {
+      connectOrCreate: {
+        where: { name: category },
+        create: { name: category },
+      },
+    },
+  });
+};
+
+const quoteWithAuthorAndCategory = Prisma.validator<Prisma.QuoteSelect>()({
+  id: true,
+  text: true,
+  author: {
+    select: {
+      id: true,
+      name: true,
+    },
+  },
+  category: {
+    select: {
+      id: true,
+      name: true,
+    },
+  },
+});
 
 @Injectable()
 export class QuotesService {
@@ -14,42 +54,13 @@ export class QuotesService {
       category: { name: category },
     } = createQuoteDto;
     return this.prisma.quote.create({
-      data: {
-        text,
-        author: {
-          connectOrCreate: {
-            where: { name: author },
-            create: { name: author },
-          },
-        },
-        category: {
-          connectOrCreate: {
-            where: { name: category },
-            create: { name: category },
-          },
-        },
-      },
+      data: createQuoteWithAuthorAndCategory(text, author, category),
     });
   }
 
   findAll() {
     return this.prisma.quote.findMany({
-      select: {
-        id: true,
-        text: true,
-        author: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-        category: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-      },
+      select: quoteWithAuthorAndCategory,
     });
   }
 
@@ -62,22 +73,7 @@ export class QuotesService {
   findOne(id: number) {
     return this.prisma.quote.findUnique({
       where: { id },
-      select: {
-        id: true,
-        text: true,
-        author: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-        category: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-      },
+      select: quoteWithAuthorAndCategory,
     });
   }
 
@@ -89,21 +85,7 @@ export class QuotesService {
     } = updateQuoteDto;
     return this.prisma.quote.update({
       where: { id },
-      data: {
-        text,
-        author: {
-          connectOrCreate: {
-            where: { name: author },
-            create: { name: author },
-          },
-        },
-        category: {
-          connectOrCreate: {
-            where: { name: category },
-            create: { name: category },
-          },
-        },
-      },
+      data: createQuoteWithAuthorAndCategory(text, author, category),
     });
   }
 

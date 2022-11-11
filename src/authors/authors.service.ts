@@ -1,7 +1,19 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
+
+const authorWithQuotes = Prisma.validator<Prisma.AuthorSelect>()({
+  id: true,
+  name: true,
+  quotes: {
+    select: {
+      id: true,
+      text: true,
+    },
+  },
+});
 
 @Injectable()
 export class AuthorsService {
@@ -18,32 +30,14 @@ export class AuthorsService {
 
   findAll() {
     return this.prisma.author.findMany({
-      select: {
-        id: true,
-        name: true,
-        quotes: {
-          select: {
-            id: true,
-            text: true,
-          },
-        },
-      },
+      select: authorWithQuotes,
     });
   }
 
   findOne(id: number) {
     return this.prisma.author.findUnique({
       where: { id },
-      select: {
-        id: true,
-        name: true,
-        quotes: {
-          select: {
-            id: true,
-            text: true,
-          },
-        },
-      },
+      select: authorWithQuotes,
     });
   }
 
